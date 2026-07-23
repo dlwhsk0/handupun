@@ -15,7 +15,7 @@ export function CategoryCard({
   status: CategoryStatus
   onClick: () => void
 }) {
-  const { category, dailyAllowance, spentToday, todayRemaining, budgetRemaining, todayRatio } = status
+  const { category, dailyAllowance, spentToday, todayRemaining, budgetRemaining, todayRatio, offToday } = status
   const level = statusLevel(todayRatio)
   const barWidth = Math.min(100, todayRatio * 100)
   const over = todayRemaining < 0
@@ -29,9 +29,14 @@ export function CategoryCard({
         <div className="flex items-center gap-2">
           <span className="h-3 w-3 rounded-full" style={{ background: category.color }} />
           <span className="font-semibold text-slate-100">{category.name}</span>
+          {category.weekdaysOnly && (
+            <span className="rounded-full bg-slate-700 px-1.5 py-0.5 text-[10px] font-medium text-slate-400">
+              주중
+            </span>
+          )}
         </div>
         <span className={`text-sm font-medium ${over ? 'text-red-400' : 'text-slate-400'}`}>
-          오늘 {over ? '초과' : '남음'}
+          {offToday ? '오늘은 쉬는 날' : `오늘 ${over ? '초과' : '남음'}`}
         </span>
       </div>
 
@@ -41,7 +46,7 @@ export function CategoryCard({
             {formatWonSigned(todayRemaining)}
           </div>
           <div className="mt-0.5 text-xs text-slate-500">
-            일 한도 {formatWon(dailyAllowance)} · 오늘 씀 {formatWon(spentToday)}
+            {offToday ? '평일 ' : '일 '}한도 {formatWon(dailyAllowance)} · 오늘 씀 {formatWon(spentToday)}
           </div>
         </div>
       </div>

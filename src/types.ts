@@ -4,6 +4,8 @@ export interface Category {
   color: string
   /** 이번 달(기간) 예산, 원 단위 */
   monthlyBudget: number
+  /** 일 한도 계산 시 주말(토·일)을 남은 일수에서 제외 (회사 점심 등) */
+  weekdaysOnly: boolean
   /** 보관 처리 시 목록에서 숨김 */
   archived: boolean
   createdAt: number

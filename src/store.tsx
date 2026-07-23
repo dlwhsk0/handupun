@@ -19,7 +19,12 @@ interface StoreValue {
   settings: Settings
   /** 보관되지 않은 카테고리 */
   activeCategories: Category[]
-  addCategory: (input: { name: string; color: string; monthlyBudget: number }) => Promise<void>
+  addCategory: (input: {
+    name: string
+    color: string
+    monthlyBudget: number
+    weekdaysOnly?: boolean
+  }) => Promise<void>
   updateCategory: (cat: Category) => Promise<void>
   removeCategory: (id: string) => Promise<void>
   addExpense: (input: { categoryId: string; amount: number; memo: string; date: string }) => Promise<void>
@@ -62,6 +67,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       name: input.name,
       color: input.color,
       monthlyBudget: input.monthlyBudget,
+      weekdaysOnly: input.weekdaysOnly ?? false,
       archived: false,
       createdAt: Date.now(),
     }

@@ -1,5 +1,5 @@
 import type { Category, Expense } from '../types'
-import { daysDiff, periodBounds, toISODate } from './date'
+import { countDaysInclusive, isWeekday, periodBounds, toISODate } from './date'
 
 export interface CategoryStatus {
   category: Category
@@ -21,6 +21,8 @@ export interface CategoryStatus {
   todayRemaining: number
   /** 오늘 한도 소진률 0~1+ */
   todayRatio: number
+  /** 주중만 카테고리인데 오늘이 주말이라 원래 안 쓰는 날 */
+  offToday: boolean
 }
 
 /**
@@ -55,12 +57,14 @@ export function computeStatus(
 
   const budget = category.monthlyBudget
   const budgetRemaining = budget - spentPeriod
-  // 오늘 포함 남은 일수 (최소 1)
-  const remainingDays = Math.max(1, daysDiff(todayStr, end) + 1)
+  const weekdaysOnly = category.weekdaysOnly ?? false
+  // 오늘 포함 남은 일수 (주중만이면 평일만, 최소 1)
+  const remainingDays = Math.max(1, countDaysInclusive(todayStr, end, weekdaysOnly))
 
   const dailyAllowance = Math.max(0, budget - spentBeforeToday) / remainingDays
   const todayRemaining = dailyAllowance - spentToday
   const todayRatio = dailyAllowance > 0 ? spentToday / dailyAllowance : spentToday > 0 ? 1 : 0
+  const offToday = weekdaysOnly && !isWeekday(todayStr)
 
   return {
     category,
@@ -73,6 +77,7 @@ export function computeStatus(
     dailyAllowance,
     todayRemaining,
     todayRatio,
+    offToday,
   }
 }
 

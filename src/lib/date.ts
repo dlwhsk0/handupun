@@ -17,6 +17,32 @@ export function daysDiff(a: string, b: string): number {
   return Math.round((db.getTime() - da.getTime()) / 86_400_000)
 }
 
+/** 평일(월~금) 여부 */
+export function isWeekday(iso: string): boolean {
+  const dow = new Date(iso + 'T00:00:00').getDay()
+  return dow >= 1 && dow <= 5
+}
+
+/**
+ * fromISO ~ toISO(양끝 포함) 사이의 일수.
+ * weekdaysOnly면 주말(토·일)을 제외하고 평일만 센다.
+ */
+export function countDaysInclusive(
+  fromISO: string,
+  toISO: string,
+  weekdaysOnly: boolean
+): number {
+  const end = new Date(toISO + 'T00:00:00').getTime()
+  const d = new Date(fromISO + 'T00:00:00')
+  let count = 0
+  while (d.getTime() <= end) {
+    const dow = d.getDay()
+    if (!weekdaysOnly || (dow >= 1 && dow <= 5)) count++
+    d.setDate(d.getDate() + 1)
+  }
+  return count
+}
+
 /**
  * monthStartDay(1~28)를 기준으로 today가 속한 예산 기간의
  * 시작일(포함)과 종료일(포함, 다음 기간 시작 전날)을 ISO 문자열로 반환.

@@ -23,16 +23,17 @@
 ```
 - 오늘 덜 쓰면 남은 예산이 남아 내일 한도가 오르고, 초과하면 내일 한도가 깎인다.
 - 예산 기간은 `settings.monthStartDay`(1~28, 급여일 등) 기준. 경계 계산은 `src/lib/date.ts`의 `periodBounds`.
+- **주중만(`category.weekdaysOnly`)**: 남은 일수를 평일(월~금)만 세서 나눈다(`countDaysInclusive`). 회사 점심처럼 주말에 안 쓰는 항목용. 주말엔 `offToday`로 "쉬는 날" 표시.
 
 ## 구조
 - `src/db.ts` — IndexedDB CRUD (categories / expenses / settings)
 - `src/store.tsx` — 전역 상태(Context) + 뮤테이션, 리마인더 스케줄
-- `src/lib/` — `budget`(계산), `date`(기간/ISO), `format`(원화/날짜), `backup`(JSON 내보내기·복원), `notify`(로컬 알림), `id`(UUID·팔레트)
+- `src/lib/` — `budget`(계산), `date`(기간/ISO/평일수), `format`(원화/날짜), `backup`(JSON), `notify`(로컬 알림), `id`(UUID·팔레트), `presets`(기본 카테고리), `onboarding`(튜토리얼 완료 플래그·localStorage)
 - `src/screens/` — `Home`(오늘 현황·기록), `Stats`(차트), `Settings`(카테고리/기간/리마인더/백업)
-- `src/components/` — `CategoryCard`, `ExpenseForm`, `CategoryForm`, `Modal`, `BottomNav`
+- `src/components/` — `CategoryCard`, `ExpenseForm`, `CategoryForm`, `Modal`, `BottomNav`, `Tutorial`(첫 실행 온보딩)
 
 ## 데이터 모델
-- `Category { id, name, color, monthlyBudget, archived, createdAt }`
+- `Category { id, name, color, monthlyBudget, weekdaysOnly, archived, createdAt }`
 - `Expense { id, categoryId, amount, memo, date('YYYY-MM-DD'), createdAt }`
 - `Settings { id:'app', currency, monthStartDay, reminderTime }`
 
@@ -44,7 +45,8 @@
 - [x] 단계 1: 데이터 계층(IndexedDB) + 예산 계산 로직 + 상태
 - [x] 단계 2: 화면(홈/통계/설정) + 지출·카테고리 기록 UI
 - [x] 단계 3: PWA(매니페스트/SW) + JSON 백업·복원 + 리마인더
-- [ ] 단계 4: (선택) 카테고리 보관, 반복 지출, 웹푸시 알림
+- [x] 단계 4: 주중만 계산(주말 제외) + 회사점심 프리셋 + 첫 실행 튜토리얼
+- [ ] 단계 5: (선택) 카테고리 보관, 반복 지출, 웹푸시 알림
 
 ## 컨벤션
 - 커밋 메시지: 한국어, 의미 단위. 배포는 `ship` 스킬 사용.

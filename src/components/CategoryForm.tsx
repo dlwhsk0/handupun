@@ -17,12 +17,14 @@ export function CategoryForm({
   const [name, setName] = useState('')
   const [budget, setBudget] = useState('')
   const [color, setColor] = useState(PALETTE[0])
+  const [weekdaysOnly, setWeekdaysOnly] = useState(false)
 
   useEffect(() => {
     if (open) {
       setName(editing?.name ?? '')
       setBudget(editing ? String(editing.monthlyBudget) : '')
       setColor(editing?.color ?? PALETTE[categories.length % PALETTE.length])
+      setWeekdaysOnly(editing?.weekdaysOnly ?? false)
     }
   }, [open, editing, categories.length])
 
@@ -32,9 +34,9 @@ export function CategoryForm({
   async function submit() {
     if (!valid) return
     if (editing) {
-      await updateCategory({ ...editing, name: name.trim(), monthlyBudget: budgetNum, color })
+      await updateCategory({ ...editing, name: name.trim(), monthlyBudget: budgetNum, color, weekdaysOnly })
     } else {
-      await addCategory({ name: name.trim(), monthlyBudget: budgetNum, color })
+      await addCategory({ name: name.trim(), monthlyBudget: budgetNum, color, weekdaysOnly })
     }
     onClose()
   }
@@ -93,6 +95,20 @@ export function CategoryForm({
             ))}
           </div>
         </div>
+
+        {/* 주말 제외 */}
+        <label className="flex items-center justify-between rounded-xl bg-slate-700/50 px-4 py-3">
+          <div>
+            <div className="text-slate-200">주중만 계산</div>
+            <div className="text-xs text-slate-500">주말을 빼고 평일 수로 일 한도를 나눠요</div>
+          </div>
+          <input
+            type="checkbox"
+            checked={weekdaysOnly}
+            onChange={(e) => setWeekdaysOnly(e.target.checked)}
+            className="h-5 w-5 accent-emerald-500"
+          />
+        </label>
 
         <button
           onClick={submit}
