@@ -16,6 +16,16 @@
 - 미리보기: `pnpm preview`
 - 린트: `pnpm lint`
 
+## 배포
+- **라이브: https://dlwhsk0.github.io/handupun/**
+- `main`에 push하면 `.github/workflows/deploy.yml`이 자동 빌드→GitHub Pages 배포.
+- Pages라 서브경로(`/handupun/`) 서빙 → `vite.config.ts`의 `base`는 빌드 시에만 `/handupun/`, dev는 `/`. PWA `scope`/`start_url`도 동일하게 맞춰져 있음.
+
+## ⚠️ pnpm 네이티브 바이너리 (중요)
+Vite 8(rolldown)·oxlint는 플랫폼별 네이티브 `.node` 바이너리가 필요한데, **pnpm 10.15는 이 optional 바이너리를 락파일에만 넣고 실제 설치를 건너뛰는 버그**가 있다(npm/cli#4828 계열). 우회책으로 필요한 바이너리를 `dependencies`에 직접 명시했다:
+`@rolldown/binding-{darwin-arm64,linux-x64-gnu}`, `@oxlint/binding-{darwin-arm64,linux-x64-gnu}`.
+로컬(darwin-arm64)과 CI(linux-x64) 둘 다 설치되며, 안 맞는 플랫폼 파일은 로드 안 되니 무해. **vite/oxlint 버전을 올리면 이 바이너리 버전도 같이 맞춰야 한다.**
+
 ## 핵심 로직 (`src/lib/budget.ts`)
 ```
 오늘의 일 한도 = max(0, 카테고리 예산 − 오늘 이전 사용액) ÷ (오늘 포함 남은 일수)
