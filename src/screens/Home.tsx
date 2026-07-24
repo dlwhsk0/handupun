@@ -67,7 +67,8 @@ export function Home({
     : over
       ? 'from-rose-600 to-red-700'
       : 'from-emerald-600 to-teal-700'
-  const barWidth = Math.min(100, focused.todayRatio * 100)
+  // 월 예산 대비 소비 게이지
+  const barWidth = focused.budget > 0 ? Math.min(100, (focused.spentPeriod / focused.budget) * 100) : 0
 
   return (
     <div className="px-4 pb-4">
@@ -97,7 +98,7 @@ export function Home({
       )}
 
       {/* 대표 그룹 히어로 */}
-      <div className={`mt-2 rounded-2xl bg-gradient-to-br ${heroBg} p-5`}>
+      <div className={`mt-2 rounded-2xl bg-gradient-to-br ${heroBg} p-4`}>
         <div className="flex items-center gap-2">
           <span className="text-sm font-semibold text-white/90">{focused.category.name}</span>
           {focused.category.weekdaysOnly && (
@@ -105,28 +106,29 @@ export function Home({
               주중
             </span>
           )}
+          {focused.offToday && (
+            <span className="text-[11px] font-medium text-white/75">오늘은 쉬는 날</span>
+          )}
         </div>
-        <div className="mt-1 text-xs text-white/80">
-          {focused.offToday ? '오늘은 쉬는 날' : '오늘 쓸 수 있는 돈'}
-        </div>
-        <div className="mt-0.5 text-4xl font-extrabold text-white">
+        <div className="mt-1 text-xs text-white/80">오늘 쓸 수 있는 돈</div>
+        <div className="mt-0.5 text-3xl font-extrabold text-white">
           {formatWonSigned(focused.todayRemaining)}
         </div>
-        <div className="mt-1 text-xs text-white/60">
+        <div className="mt-0.5 text-xs text-white/60">
           이번 달 소비 {formatWon(focused.spentPeriod)}
         </div>
         <div className="mt-1 text-sm text-white/80">
           {focused.offToday ? '평일 ' : '일 '}한도 {formatWon(focused.dailyAllowance)} · 오늘 씀{' '}
           {formatWon(focused.spentToday)}
         </div>
-        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/20">
+        <div className="mt-2.5 h-2 w-full overflow-hidden rounded-full bg-white/20">
           <div className="h-full rounded-full bg-white transition-all" style={{ width: `${barWidth}%` }} />
         </div>
         <button
           onClick={() => onQuickAdd(focused.category.id)}
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-white/20 py-3 font-bold text-white backdrop-blur active:scale-[0.98]"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-white/20 py-2.5 font-bold text-white backdrop-blur active:scale-[0.98]"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
             <path d="M12 5v14M5 12h14" />
           </svg>
           기록하기
