@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useStore } from './store'
 import { BottomNav, type Tab } from './components/BottomNav'
 import { Home } from './screens/Home'
+import { Records } from './screens/Records'
 import { Stats } from './screens/Stats'
 import { Settings } from './screens/Settings'
 import { ExpenseForm } from './components/ExpenseForm'
@@ -11,6 +12,7 @@ import { isOnboarded } from './lib/onboarding'
 
 const TITLES: Record<Tab, string> = {
   home: '한두푼',
+  records: '기록',
   stats: '통계',
   settings: '설정',
 }
@@ -66,6 +68,7 @@ export default function App() {
         {tab === 'home' && (
           <Home onAddCategory={() => setCategoryOpen(true)} onQuickAdd={quickAdd} />
         )}
+        {tab === 'records' && <Records />}
         {tab === 'stats' && <Stats />}
         {tab === 'settings' && <Settings />}
       </main>

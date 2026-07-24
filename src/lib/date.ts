@@ -60,3 +60,20 @@ export function periodBounds(
   const end = new Date(nextStart.getTime() - 86_400_000)
   return { start: toISODate(start), end: toISODate(end) }
 }
+
+/**
+ * 현재 기간에서 offset만큼(월 단위) 이동한 예산 기간의 경계.
+ * offset 0 = 이번 기간, -1 = 지난 기간, +1 = 다음 기간.
+ */
+export function periodBoundsOffset(
+  today: Date,
+  startDay: number,
+  offset: number
+): { start: string; end: string } {
+  const { start } = periodBounds(today, startDay)
+  const s = new Date(start + 'T00:00:00')
+  const shifted = new Date(s.getFullYear(), s.getMonth() + offset, startDay)
+  const nextStart = new Date(shifted.getFullYear(), shifted.getMonth() + 1, startDay)
+  const end = new Date(nextStart.getTime() - 86_400_000)
+  return { start: toISODate(shifted), end: toISODate(end) }
+}
