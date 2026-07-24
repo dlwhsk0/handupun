@@ -51,7 +51,7 @@ export function Home({
   if (activeCategories.length === 0 || !focused) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
-        <div className="mb-4 text-5xl">🐷</div>
+        <div className="mb-4 text-5xl">🪙</div>
         <h2 className="mb-2 text-xl font-bold text-slate-100">그룹을 먼저 만들어요</h2>
         <p className="mb-6 text-sm text-slate-400">
           점심, 카페처럼 관리할 지출 그룹과 월 예산을 정하면
