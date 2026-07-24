@@ -18,7 +18,7 @@ const TITLES: Record<Tab, string> = {
 }
 
 export default function App() {
-  const { loading, categories } = useStore()
+  const { loading, categories, activeCategories, settings } = useStore()
   const [tab, setTab] = useState<Tab>('home')
   const [expenseOpen, setExpenseOpen] = useState(false)
   const [expensePreset, setExpensePreset] = useState<string | undefined>()
@@ -36,6 +36,13 @@ export default function App() {
     setExpensePreset(categoryId)
     setExpenseOpen(true)
   }
+
+  // 홈 하단 기록 버튼이 기록할 대상 = 대표 그룹(없으면 첫 그룹)
+  const focused =
+    (settings.primaryCategoryId &&
+      activeCategories.find((c) => c.id === settings.primaryCategoryId)) ||
+    activeCategories[0]
+  const focusedId = focused?.id
 
   if (loading) {
     return (
@@ -68,7 +75,6 @@ export default function App() {
         {tab === 'home' && (
           <Home
             onAddCategory={() => setCategoryOpen(true)}
-            onQuickAdd={quickAdd}
             onSeeAll={() => setTab('records')}
           />
         )}
@@ -76,6 +82,21 @@ export default function App() {
         {tab === 'stats' && <Stats />}
         {tab === 'settings' && <Settings />}
       </main>
+
+      {/* 홈 하단 고정 기록 버튼 */}
+      {tab === 'home' && activeCategories.length > 0 && (
+        <div className="border-t border-slate-800 bg-slate-900/95 px-4 py-3 backdrop-blur">
+          <button
+            onClick={() => quickAdd(focusedId)}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 py-3 font-bold text-white active:scale-[0.98]"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            {focused ? `${focused.name} 기록하기` : '기록하기'}
+          </button>
+        </div>
+      )}
 
       <BottomNav tab={tab} onChange={setTab} />
 
