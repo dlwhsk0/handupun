@@ -5,8 +5,6 @@ import { ExpenseList } from '../components/ExpenseList'
 import { formatWon, formatWonSigned } from '../lib/format'
 import { periodBounds, todayISO } from '../lib/date'
 
-const RECENT_DAYS = 3
-
 export function Home({
   onAddCategory,
   onQuickAdd,
@@ -43,11 +41,6 @@ export function Home({
         : [],
     [expenses, focused, start, end]
   )
-  const distinctDays = useMemo(
-    () => new Set(focusedRecords.map((e) => e.date)).size,
-    [focusedRecords]
-  )
-
   if (activeCategories.length === 0 || !focused) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
@@ -166,18 +159,20 @@ export function Home({
         </div>
       )}
 
-      {/* 대표 그룹 최근 기록 */}
+      {/* 대표 그룹 최근 기록 (약 5개 보이고, 그 안에서 스크롤) */}
       {focusedRecords.length > 0 && (
         <div className="mt-6">
           <div className="mb-2 flex items-center justify-between px-1">
             <h3 className="text-sm font-semibold text-slate-400">{focused.category.name} · 최근 기록</h3>
-            {distinctDays > RECENT_DAYS && (
+            {focusedRecords.length > 5 && (
               <button onClick={onSeeAll} className="text-sm font-medium text-emerald-400">
                 전체 보기 →
               </button>
             )}
           </div>
-          <ExpenseList expenses={focusedRecords} maxGroups={RECENT_DAYS} />
+          <div className="max-h-72 overflow-y-auto overscroll-contain pr-0.5">
+            <ExpenseList expenses={focusedRecords} />
+          </div>
         </div>
       )}
     </div>
