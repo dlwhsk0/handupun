@@ -4,7 +4,14 @@ import { formatWon, formatDateKo } from '../lib/format'
 import type { Expense } from '../types'
 
 /** 지출 목록을 날짜별(최신순)로 그룹핑해 렌더. 비어 있으면 아무것도 그리지 않음. */
-export function ExpenseList({ expenses }: { expenses: Expense[] }) {
+export function ExpenseList({
+  expenses,
+  maxGroups,
+}: {
+  expenses: Expense[]
+  /** 지정 시 최신 N일치 그룹만 표시 */
+  maxGroups?: number
+}) {
   const { categories, removeExpense } = useStore()
 
   const groups = useMemo(() => {
@@ -14,14 +21,15 @@ export function ExpenseList({ expenses }: { expenses: Expense[] }) {
       arr.push(e)
       map.set(e.date, arr)
     }
-    return [...map.entries()]
+    const all = [...map.entries()]
       .sort((a, b) => (a[0] < b[0] ? 1 : -1))
       .map(([date, items]) => ({
         date,
         items: items.sort((a, b) => b.createdAt - a.createdAt),
         total: items.reduce((s, e) => s + e.amount, 0),
       }))
-  }, [expenses])
+    return maxGroups ? all.slice(0, maxGroups) : all
+  }, [expenses, maxGroups])
 
   const catName = (id: string) => categories.find((c) => c.id === id)?.name ?? '삭제됨'
   const catColor = (id: string) => categories.find((c) => c.id === id)?.color ?? '#64748b'

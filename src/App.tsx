@@ -66,7 +66,11 @@ export default function App() {
       {/* 본문 */}
       <main className="flex flex-1 flex-col overflow-y-auto">
         {tab === 'home' && (
-          <Home onAddCategory={() => setCategoryOpen(true)} onQuickAdd={quickAdd} />
+          <Home
+            onAddCategory={() => setCategoryOpen(true)}
+            onQuickAdd={quickAdd}
+            onSeeAll={() => setTab('records')}
+          />
         )}
         {tab === 'records' && <Records />}
         {tab === 'stats' && <Stats />}

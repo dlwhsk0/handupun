@@ -6,12 +6,16 @@ import { ExpenseList } from '../components/ExpenseList'
 import { formatWon, formatWonSigned, formatDateKo } from '../lib/format'
 import { periodBounds, todayISO } from '../lib/date'
 
+const RECENT_DAYS = 3
+
 export function Home({
   onAddCategory,
   onQuickAdd,
+  onSeeAll,
 }: {
   onAddCategory: () => void
   onQuickAdd: (categoryId?: string) => void
+  onSeeAll: () => void
 }) {
   const { activeCategories, expenses, settings } = useStore()
 
@@ -31,6 +35,10 @@ export function Home({
   const periodExpenses = useMemo(
     () => expenses.filter((e) => e.date >= start && e.date <= end),
     [expenses, start, end]
+  )
+  const distinctDays = useMemo(
+    () => new Set(periodExpenses.map((e) => e.date)).size,
+    [periodExpenses]
   )
 
   if (activeCategories.length === 0) {
@@ -71,11 +79,18 @@ export function Home({
         ))}
       </div>
 
-      {/* 이번 달 기록 */}
+      {/* 최근 기록 */}
       {periodExpenses.length > 0 && (
         <div className="mt-6">
-          <h3 className="mb-2 px-1 text-sm font-semibold text-slate-400">이번 달 기록</h3>
-          <ExpenseList expenses={periodExpenses} />
+          <div className="mb-2 flex items-center justify-between px-1">
+            <h3 className="text-sm font-semibold text-slate-400">최근 기록</h3>
+            {distinctDays > RECENT_DAYS && (
+              <button onClick={onSeeAll} className="text-sm font-medium text-emerald-400">
+                전체 보기 →
+              </button>
+            )}
+          </div>
+          <ExpenseList expenses={periodExpenses} maxGroups={RECENT_DAYS} />
         </div>
       )}
     </div>
