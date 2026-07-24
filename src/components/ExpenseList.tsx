@@ -37,27 +37,31 @@ export function ExpenseList({
   if (groups.length === 0) return null
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3.5">
       {groups.map((g) => (
         <div key={g.date}>
-          <div className="mb-1.5 flex items-center justify-between px-1">
-            <span className="text-sm font-semibold text-slate-300">{formatDateKo(g.date)}</span>
-            <span className="text-xs text-slate-500">{formatWon(g.total)}</span>
+          <div className="mb-1 flex items-center justify-between px-1">
+            <span className="text-xs font-medium text-slate-500">{formatDateKo(g.date)}</span>
+            <span className="text-xs text-slate-600">{formatWon(g.total)}</span>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             {g.items.map((e) => (
               <div
                 key={e.id}
-                className="flex items-center justify-between rounded-xl bg-slate-800 px-4 py-3"
+                className="flex items-center justify-between rounded-xl bg-slate-800 px-4 py-2.5"
               >
-                <div className="flex items-center gap-2.5">
-                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: catColor(e.categoryId) }} />
-                  <div>
-                    <div className="text-sm font-medium text-slate-200">{catName(e.categoryId)}</div>
-                    {e.memo && <div className="text-xs text-slate-500">{e.memo}</div>}
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: catColor(e.categoryId) }} />
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-semibold text-slate-100">
+                      {e.memo || catName(e.categoryId)}
+                    </div>
+                    {e.memo && (
+                      <div className="truncate text-xs text-slate-500">{catName(e.categoryId)}</div>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex shrink-0 items-center gap-3">
                   <span className="font-semibold text-slate-200">{formatWon(e.amount)}</span>
                   <button
                     onClick={() => removeExpense(e.id)}

@@ -60,7 +60,7 @@ export default function App() {
       {/* 헤더 */}
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-800 bg-slate-900/95 px-4 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))] backdrop-blur">
         <h1 className="text-lg font-extrabold text-slate-100">{TITLES[tab]}</h1>
-        {tab === 'home' && <span className="text-xl">🐷</span>}
+        {tab === 'home' && <span className="text-xl">🪙</span>}
       </header>
 
       {/* 본문 */}
