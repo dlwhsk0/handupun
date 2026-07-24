@@ -99,30 +99,44 @@ export function Home({
 
       {/* 대표 그룹 히어로 */}
       <div className={`mt-2 rounded-2xl bg-gradient-to-br ${heroBg} p-4`}>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-white/90">{focused.category.name}</span>
-          {focused.category.weekdaysOnly && (
-            <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-[10px] font-medium text-white/90">
-              주중
+        {/* 헤더: 그룹명 + 뱃지 / 쉬는 날 */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-white/90">{focused.category.name}</span>
+            {focused.category.weekdaysOnly && (
+              <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-[10px] font-medium text-white/90">
+                주중
+              </span>
+            )}
+          </div>
+          {focused.offToday && (
+            <span className="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-medium text-white/85">
+              오늘은 쉬는 날
             </span>
           )}
-          {focused.offToday && (
-            <span className="text-[11px] font-medium text-white/75">오늘은 쉬는 날</span>
-          )}
         </div>
-        <div className="mt-1 text-xs text-white/80">오늘 쓸 수 있는 돈</div>
-        <div className="mt-0.5 text-3xl font-extrabold text-white">
+
+        {/* 히어로: 오늘 쓸 수 있는 돈 (주인공) + 근거 한 줄 */}
+        <div className="mt-3 text-xs text-white/70">오늘 쓸 수 있는 돈</div>
+        <div className="mt-0.5 text-4xl font-extrabold tracking-tight text-white">
           {formatWonSigned(focused.todayRemaining)}
         </div>
-        <div className="mt-0.5 text-xs text-white/60">
-          이번 달 소비 {formatWon(focused.spentPeriod)}
-        </div>
-        <div className="mt-1 text-sm text-white/80">
+        <div className="mt-1 text-xs text-white/70">
           {focused.offToday ? '평일 ' : '일 '}한도 {formatWon(focused.dailyAllowance)} · 오늘 씀{' '}
           {formatWon(focused.spentToday)}
         </div>
-        <div className="mt-2.5 h-2 w-full overflow-hidden rounded-full bg-white/20">
-          <div className="h-full rounded-full bg-white transition-all" style={{ width: `${barWidth}%` }} />
+
+        {/* 월 진행: 게이지 + 캡션(이번 달 소비 / 예산) */}
+        <div className="mt-4">
+          <div className="mb-1 flex items-center justify-between text-xs text-white/70">
+            <span>이번 달 소비</span>
+            <span>
+              {formatWon(focused.spentPeriod)} / {formatWon(focused.budget)}
+            </span>
+          </div>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-white/20">
+            <div className="h-full rounded-full bg-white transition-all" style={{ width: `${barWidth}%` }} />
+          </div>
         </div>
         <button
           onClick={() => onQuickAdd(focused.category.id)}
