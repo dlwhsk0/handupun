@@ -3,13 +3,9 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// GitHub Pages는 https://<user>.github.io/handupun/ 서브경로로 서빙된다.
-// 개발 서버는 루트('/')로 두고, 빌드 시에만 서브경로 base를 적용한다.
-const BASE = '/handupun/'
-
 // https://vite.dev/config/
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? BASE : '/',
+// Vercel은 루트 도메인(handupun.vercel.app)으로 서빙하므로 base는 기본 '/'.
+export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
@@ -25,8 +21,8 @@ export default defineConfig(({ command }) => ({
         display: 'standalone',
         orientation: 'portrait',
         lang: 'ko',
-        start_url: BASE,
-        scope: BASE,
+        start_url: '/',
+        scope: '/',
         icons: [
           {
             src: 'icon.svg',
@@ -41,4 +37,4 @@ export default defineConfig(({ command }) => ({
       },
     }),
   ],
-}))
+})
