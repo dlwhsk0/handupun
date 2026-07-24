@@ -2,8 +2,9 @@ import { useMemo } from 'react'
 import { useStore } from '../store'
 import { computeStatus } from '../lib/budget'
 import { CategoryCard } from '../components/CategoryCard'
+import { ExpenseList } from '../components/ExpenseList'
 import { formatWon, formatWonSigned, formatDateKo } from '../lib/format'
-import { todayISO } from '../lib/date'
+import { periodBounds, todayISO } from '../lib/date'
 
 export function Home({
   onAddCategory,
@@ -12,10 +13,11 @@ export function Home({
   onAddCategory: () => void
   onQuickAdd: (categoryId?: string) => void
 }) {
-  const { activeCategories, expenses, settings, removeExpense } = useStore()
+  const { activeCategories, expenses, settings } = useStore()
 
   const today = new Date()
   const todayStr = todayISO()
+  const { start, end } = periodBounds(today, settings.monthStartDay)
 
   const statuses = useMemo(
     () => activeCategories.map((c) => computeStatus(c, expenses, today, settings.monthStartDay)),
@@ -26,9 +28,10 @@ export function Home({
   const totalTodayRemaining = statuses.reduce((s, x) => s + x.todayRemaining, 0)
   const totalTodaySpent = statuses.reduce((s, x) => s + x.spentToday, 0)
 
-  const todayExpenses = expenses.filter((e) => e.date === todayStr)
-  const catName = (id: string) => activeCategories.find((c) => c.id === id)?.name ?? '삭제됨'
-  const catColor = (id: string) => activeCategories.find((c) => c.id === id)?.color ?? '#64748b'
+  const periodExpenses = useMemo(
+    () => expenses.filter((e) => e.date >= start && e.date <= end),
+    [expenses, start, end]
+  )
 
   if (activeCategories.length === 0) {
     return (
@@ -68,38 +71,11 @@ export function Home({
         ))}
       </div>
 
-      {/* 오늘 기록 */}
-      {todayExpenses.length > 0 && (
+      {/* 이번 달 기록 */}
+      {periodExpenses.length > 0 && (
         <div className="mt-6">
-          <h3 className="mb-2 px-1 text-sm font-semibold text-slate-400">오늘 기록</h3>
-          <div className="space-y-1.5">
-            {todayExpenses.map((e) => (
-              <div
-                key={e.id}
-                className="flex items-center justify-between rounded-xl bg-slate-800 px-4 py-3"
-              >
-                <div className="flex items-center gap-2.5">
-                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: catColor(e.categoryId) }} />
-                  <div>
-                    <div className="text-sm font-medium text-slate-200">{catName(e.categoryId)}</div>
-                    {e.memo && <div className="text-xs text-slate-500">{e.memo}</div>}
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="font-semibold text-slate-200">{formatWon(e.amount)}</span>
-                  <button
-                    onClick={() => removeExpense(e.id)}
-                    className="text-slate-500 hover:text-red-400"
-                    aria-label="삭제"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M18 6 6 18M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+          <h3 className="mb-2 px-1 text-sm font-semibold text-slate-400">이번 달 기록</h3>
+          <ExpenseList expenses={periodExpenses} />
         </div>
       )}
     </div>

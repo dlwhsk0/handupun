@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react'
 import { useStore } from '../store'
 import { periodBoundsOffset } from '../lib/date'
-import { formatWon, formatDateKo } from '../lib/format'
-import type { Expense } from '../types'
+import { formatWon } from '../lib/format'
+import { ExpenseList } from '../components/ExpenseList'
 
 export function Records() {
-  const { categories, expenses, settings, removeExpense } = useStore()
+  const { expenses, settings } = useStore()
   const [offset, setOffset] = useState(0)
   const today = new Date()
 
@@ -16,26 +16,7 @@ export function Records() {
     [expenses, start, end]
   )
 
-  // 날짜별 그룹 (최신순)
-  const groups = useMemo(() => {
-    const map = new Map<string, Expense[]>()
-    for (const e of inPeriod) {
-      const arr = map.get(e.date) ?? []
-      arr.push(e)
-      map.set(e.date, arr)
-    }
-    return [...map.entries()]
-      .sort((a, b) => (a[0] < b[0] ? 1 : -1))
-      .map(([date, items]) => ({
-        date,
-        items: items.sort((a, b) => b.createdAt - a.createdAt),
-        total: items.reduce((s, e) => s + e.amount, 0),
-      }))
-  }, [inPeriod])
-
   const total = inPeriod.reduce((s, e) => s + e.amount, 0)
-  const catName = (id: string) => categories.find((c) => c.id === id)?.name ?? '삭제됨'
-  const catColor = (id: string) => categories.find((c) => c.id === id)?.color ?? '#64748b'
 
   // 기간 라벨: 시작일이 1일이면 "YYYY년 M월", 아니면 "M/D ~ M/D"
   const label = useMemo(() => {
@@ -77,50 +58,13 @@ export function Records() {
       </div>
 
       {/* 날짜별 기록 */}
-      {groups.length === 0 ? (
+      {inPeriod.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="mb-3 text-4xl">🧾</div>
           <p className="text-sm text-slate-500">이 기간엔 기록이 없어요.</p>
         </div>
       ) : (
-        <div className="space-y-5">
-          {groups.map((g) => (
-            <div key={g.date}>
-              <div className="mb-1.5 flex items-center justify-between px-1">
-                <span className="text-sm font-semibold text-slate-300">{formatDateKo(g.date)}</span>
-                <span className="text-xs text-slate-500">{formatWon(g.total)}</span>
-              </div>
-              <div className="space-y-1.5">
-                {g.items.map((e) => (
-                  <div
-                    key={e.id}
-                    className="flex items-center justify-between rounded-xl bg-slate-800 px-4 py-3"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <span className="h-2.5 w-2.5 rounded-full" style={{ background: catColor(e.categoryId) }} />
-                      <div>
-                        <div className="text-sm font-medium text-slate-200">{catName(e.categoryId)}</div>
-                        {e.memo && <div className="text-xs text-slate-500">{e.memo}</div>}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold text-slate-200">{formatWon(e.amount)}</span>
-                      <button
-                        onClick={() => removeExpense(e.id)}
-                        className="text-slate-500 hover:text-red-400"
-                        aria-label="삭제"
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M18 6 6 18M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        <ExpenseList expenses={inPeriod} />
       )}
     </div>
   )
