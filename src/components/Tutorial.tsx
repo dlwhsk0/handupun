@@ -152,7 +152,7 @@ export function Tutorial({
             onClick={skip}
             className="w-full py-2 text-sm font-medium text-slate-400"
           >
-            직접 다른 카테고리 만들기
+            직접 다른 그룹 만들기
           </button>
         </>
       )}

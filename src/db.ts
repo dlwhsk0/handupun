@@ -42,6 +42,7 @@ export const DEFAULT_SETTINGS: Settings = {
   currency: 'KRW',
   monthStartDay: 1,
   reminderTime: null,
+  primaryCategoryId: null,
 }
 
 // --- Categories ---

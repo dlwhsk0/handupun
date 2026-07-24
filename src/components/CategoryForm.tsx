@@ -44,14 +44,14 @@ export function CategoryForm({
 
   async function handleDelete() {
     if (!editing) return
-    if (confirm(`'${editing.name}' 카테고리와 관련 기록을 모두 삭제할까요?`)) {
+    if (confirm(`'${editing.name}' 그룹과 관련 기록을 모두 삭제할까요?`)) {
       await removeCategory(editing.id)
       onClose()
     }
   }
 
   return (
-    <Modal open={open} onClose={onClose} title={editing ? '카테고리 수정' : '카테고리 추가'}>
+    <Modal open={open} onClose={onClose} title={editing ? '그룹 수정' : '그룹 추가'}>
       <div className="space-y-4">
         <div>
           <label className="mb-1.5 block text-sm text-slate-400">이름</label>
@@ -121,7 +121,7 @@ export function CategoryForm({
             onClick={handleDelete}
             className="w-full rounded-xl py-2.5 text-sm font-medium text-red-400 hover:bg-slate-700"
           >
-            카테고리 삭제
+            그룹 삭제
           </button>
         )}
       </div>

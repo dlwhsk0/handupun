@@ -60,7 +60,7 @@ export function Stats() {
   if (categories.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center px-8 text-center text-sm text-slate-500">
-        아직 데이터가 없어요. 카테고리를 만들고 지출을 기록해보세요.
+        아직 데이터가 없어요. 그룹을 만들고 지출을 기록해보세요.
       </div>
     )
   }
@@ -80,7 +80,7 @@ export function Stats() {
 
       {/* 카테고리 비율 */}
       <div className="rounded-2xl bg-slate-800 p-4">
-        <h3 className="mb-2 text-sm font-semibold text-slate-300">카테고리별 사용</h3>
+        <h3 className="mb-2 text-sm font-semibold text-slate-300">그룹별 사용</h3>
         {totalSpent === 0 ? (
           <p className="py-8 text-center text-sm text-slate-500">이번 달 지출이 아직 없어요.</p>
         ) : (

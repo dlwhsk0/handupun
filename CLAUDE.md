@@ -40,13 +40,18 @@ Vite 8(rolldown)·oxlint는 플랫폼별 네이티브 `.node` 바이너리가 �
 - `src/db.ts` — IndexedDB CRUD (categories / expenses / settings)
 - `src/store.tsx` — 전역 상태(Context) + 뮤테이션, 리마인더 스케줄
 - `src/lib/` — `budget`(계산), `date`(기간/ISO/평일수), `format`(원화/날짜), `backup`(JSON), `notify`(로컬 알림), `id`(UUID·팔레트), `presets`(기본 카테고리), `onboarding`(튜토리얼 완료 플래그·localStorage)
-- `src/screens/` — `Home`(오늘 현황·기록), `Stats`(차트), `Settings`(카테고리/기간/리마인더/백업)
-- `src/components/` — `CategoryCard`, `ExpenseForm`, `CategoryForm`, `Modal`, `BottomNav`, `Tutorial`(첫 실행 온보딩)
+- `src/screens/` — `Home`(대표 그룹 중심), `Records`(기간별 전체 기록), `Stats`(차트), `Settings`(그룹/기간/리마인더/백업)
+- `src/components/` — `ExpenseForm`, `CategoryForm`, `ExpenseList`(날짜별 그룹 목록, 홈·기록 공유), `AmountInput`(콤마 금액), `Modal`, `BottomNav`, `Tutorial`(첫 실행 온보딩)
+
+## 컨셉 / 화면
+- **미니멀이 핵심.** 홈은 **대표 그룹 하나**(`settings.primaryCategoryId`, 없으면 첫 그룹)의 오늘 쓸 수 있는 금액 + 그 그룹의 최근 기록만 크게 보여준다. 상단 칩으로 대표 전환, 나머지 그룹은 한 줄 요약.
+- 월별/전체 통합 조회는 **서브**(기록·통계 탭). "카테고리"는 UI에선 **"그룹"**으로 부른다(코드 타입명은 `Category` 유지).
+- (저금/모금 기능은 추후 추가 예정 — 아직 없음.)
 
 ## 데이터 모델
 - `Category { id, name, color, monthlyBudget, weekdaysOnly, archived, createdAt }`
 - `Expense { id, categoryId, amount, memo, date('YYYY-MM-DD'), createdAt }`
-- `Settings { id:'app', currency, monthStartDay, reminderTime }`
+- `Settings { id:'app', currency, monthStartDay, reminderTime, primaryCategoryId }`
 
 ## 알려진 제약
 - **리마인더 알림**: 백엔드 없이 앱(탭/PWA)이 실행 중일 때만 발화. 완전 종료 시 정시 알림 보장 불가 → 필요 시 웹푸시 백엔드 추가가 로드맵.

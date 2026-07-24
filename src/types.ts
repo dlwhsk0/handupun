@@ -30,6 +30,8 @@ export interface Settings {
   monthStartDay: number
   /** 리마인더 시각 'HH:MM', 끄면 null */
   reminderTime: string | null
+  /** 홈에서 메인으로 보여줄 대표 그룹. null이면 첫 그룹 */
+  primaryCategoryId: string | null
 }
 
 export interface BackupData {

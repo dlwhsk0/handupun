@@ -48,7 +48,7 @@ export function ExpenseForm({
       <div className="space-y-4">
         {/* 카테고리 */}
         <div>
-          <label className="mb-1.5 block text-sm text-slate-400">카테고리</label>
+          <label className="mb-1.5 block text-sm text-slate-400">그룹</label>
           <div className="flex flex-wrap gap-2">
             {activeCategories.map((c) => (
               <button

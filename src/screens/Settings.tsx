@@ -56,7 +56,7 @@ export function Settings() {
       {/* 카테고리 관리 */}
       <section>
         <div className="mb-2 flex items-center justify-between px-1">
-          <h3 className="text-sm font-semibold text-slate-400">카테고리 · 예산</h3>
+          <h3 className="text-sm font-semibold text-slate-400">그룹 · 예산</h3>
           <button onClick={openAdd} className="text-sm font-medium text-emerald-400">
             + 추가
           </button>
@@ -64,7 +64,7 @@ export function Settings() {
         <div className="space-y-1.5">
           {categories.length === 0 && (
             <p className="rounded-xl bg-slate-800 px-4 py-3 text-sm text-slate-500">
-              아직 카테고리가 없어요.
+              아직 그룹이 없어요.
             </p>
           )}
           {categories.map((c) => (

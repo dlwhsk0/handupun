@@ -18,7 +18,7 @@ const TITLES: Record<Tab, string> = {
 }
 
 export default function App() {
-  const { loading, categories, activeCategories } = useStore()
+  const { loading, categories } = useStore()
   const [tab, setTab] = useState<Tab>('home')
   const [expenseOpen, setExpenseOpen] = useState(false)
   const [expensePreset, setExpensePreset] = useState<string | undefined>()
@@ -76,19 +76,6 @@ export default function App() {
         {tab === 'stats' && <Stats />}
         {tab === 'settings' && <Settings />}
       </main>
-
-      {/* 지출 기록 FAB (홈에서, 카테고리 있을 때) */}
-      {tab === 'home' && activeCategories.length > 0 && (
-        <button
-          onClick={() => quickAdd(undefined)}
-          className="fixed bottom-20 left-1/2 z-30 flex h-14 -translate-x-1/2 items-center gap-2 rounded-full bg-emerald-500 px-6 font-bold text-white shadow-lg shadow-emerald-500/30 active:scale-95"
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-          기록
-        </button>
-      )}
 
       <BottomNav tab={tab} onChange={setTab} />
 
