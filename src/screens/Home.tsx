@@ -61,12 +61,15 @@ export function Home({
     )
   }
 
-  const over = focused.todayRemaining < 0
+  // 오늘 상태로 배경색 신호: 여유(초록) → 아슬아슬(주황) → 초과(빨강), 쉬는 날(회색)
+  const heroLevel = statusLevel(focused.todayRatio)
   const heroBg = focused.offToday
     ? 'from-slate-600 to-slate-700'
-    : over
+    : heroLevel === 'over'
       ? 'from-rose-600 to-red-700'
-      : 'from-emerald-600 to-teal-700'
+      : heroLevel === 'warn'
+        ? 'from-amber-500 to-orange-600'
+        : 'from-emerald-600 to-teal-700'
   // 월 예산 대비 소비 게이지
   const barWidth = focused.budget > 0 ? Math.min(100, (focused.spentPeriod / focused.budget) * 100) : 0
 
