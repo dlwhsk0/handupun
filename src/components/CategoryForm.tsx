@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Modal } from './Modal'
+import { AmountInput } from './AmountInput'
 import { useStore } from '../store'
 import { PALETTE } from '../lib/id'
 import type { Category } from '../types'
@@ -67,12 +68,9 @@ export function CategoryForm({
         <div>
           <label className="mb-1.5 block text-sm text-slate-400">월 예산</label>
           <div className="relative">
-            <input
-              type="number"
-              inputMode="numeric"
+            <AmountInput
               value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-              placeholder="0"
+              onChange={setBudget}
               className="w-full rounded-xl bg-slate-700 px-4 py-3 pr-10 text-right text-xl font-bold text-slate-100 outline-none focus:ring-2 focus:ring-emerald-500"
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">원</span>

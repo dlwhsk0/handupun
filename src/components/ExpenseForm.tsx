@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Modal } from './Modal'
+import { AmountInput } from './AmountInput'
 import { useStore } from '../store'
 import { todayISO } from '../lib/date'
-import { formatWon } from '../lib/format'
 
 export function ExpenseForm({
   open,
@@ -69,20 +69,14 @@ export function ExpenseForm({
         <div>
           <label className="mb-1.5 block text-sm text-slate-400">금액</label>
           <div className="relative">
-            <input
-              type="number"
-              inputMode="numeric"
+            <AmountInput
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="0"
+              onChange={setAmount}
               autoFocus
               className="w-full rounded-xl bg-slate-700 px-4 py-3 pr-10 text-right text-2xl font-bold text-slate-100 outline-none focus:ring-2 focus:ring-emerald-500"
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-lg text-slate-400">원</span>
           </div>
-          {amountNum > 0 && (
-            <div className="mt-1 text-right text-sm text-slate-500">{formatWon(amountNum)}</div>
-          )}
         </div>
 
         {/* 가게/메모 */}

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useStore } from '../store'
+import { AmountInput } from './AmountInput'
 import { LUNCH_PRESET } from '../lib/presets'
 import { formatWon } from '../lib/format'
 import { countDaysInclusive, periodBounds } from '../lib/date'
@@ -123,11 +124,9 @@ export function Tutorial({
                 월 예산
               </label>
               <div className="relative">
-                <input
-                  type="number"
-                  inputMode="numeric"
+                <AmountInput
                   value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
+                  onChange={setBudget}
                   className="w-full rounded-xl bg-slate-800 px-4 py-3 pr-10 text-right text-2xl font-bold text-slate-100 outline-none focus:ring-2 focus:ring-emerald-500"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
