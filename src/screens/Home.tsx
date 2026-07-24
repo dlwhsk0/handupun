@@ -112,6 +112,9 @@ export function Home({
         <div className="mt-0.5 text-4xl font-extrabold text-white">
           {formatWonSigned(focused.todayRemaining)}
         </div>
+        <div className="mt-1 text-xs text-white/60">
+          이번 달 소비 {formatWon(focused.spentPeriod)}
+        </div>
         <div className="mt-1 text-sm text-white/80">
           {focused.offToday ? '평일 ' : '일 '}한도 {formatWon(focused.dailyAllowance)} · 오늘 씀{' '}
           {formatWon(focused.spentToday)}
