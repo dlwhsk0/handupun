@@ -17,9 +17,10 @@
 - 린트: `pnpm lint`
 
 ## 배포
-- **라이브: https://dlwhsk0.github.io/handupun/**
-- `main`에 push하면 `.github/workflows/deploy.yml`이 자동 빌드→GitHub Pages 배포.
-- Pages라 서브경로(`/handupun/`) 서빙 → `vite.config.ts`의 `base`는 빌드 시에만 `/handupun/`, dev는 `/`. PWA `scope`/`start_url`도 동일하게 맞춰져 있음.
+- **라이브: https://handupun.vercel.app** (Vercel, 계정 `dlwhsk0`)
+- GitHub 레포가 Vercel 프로젝트에 연결돼 있어 **`main`에 push하면 자동 배포**. 수동 배포는 `vercel deploy --prod`.
+- 루트 도메인이라 Vite `base`는 기본 `/`, PWA `scope`/`start_url`도 `/`.
+- (이전엔 GitHub Pages였으나 2026-07-24 Vercel로 전환. Pages 사이트·워크플로우는 제거됨.)
 
 ## ⚠️ pnpm 네이티브 바이너리 (중요)
 Vite 8(rolldown)·oxlint는 플랫폼별 네이티브 `.node` 바이너리가 필요한데, **pnpm 10.15는 이 optional 바이너리를 락파일에만 넣고 실제 설치를 건너뛰는 버그**가 있다(npm/cli#4828 계열). 우회책으로 필요한 바이너리를 `dependencies`에 직접 명시했다:
